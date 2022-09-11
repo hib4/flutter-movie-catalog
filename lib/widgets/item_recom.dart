@@ -4,18 +4,18 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../ui/detail/detail.dart';
 
-class ItemMovie extends StatelessWidget {
+class ItemRecommendation extends StatelessWidget {
   final int id;
-  final String image;
   final String title;
-  final num rating;
+  final String poster;
+  final double vote;
 
-  const ItemMovie(
+  const ItemRecommendation(
       {Key? key,
-      required this.image,
+      required this.id,
       required this.title,
-      required this.rating,
-      required this.id})
+      required this.poster,
+      required this.vote})
       : super(key: key);
 
   @override
@@ -32,34 +32,35 @@ class ItemMovie extends StatelessWidget {
         );
       },
       child: Container(
-        width: size.width * 0.34,
-        margin: EdgeInsets.only(right: 20),
+        width: size.width * 0.3,
+        margin: EdgeInsets.only(right: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: size.width * 0.34,
-              height: size.height * 0.25,
+              width: size.width * 0.3,
+              height: size.height * 0.22,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
               ),
               child: CachedNetworkImage(
-                imageUrl: "https://image.tmdb.org/t/p/w500$image",
+                imageUrl:
+                    "https://image.tmdb.org/t/p/w500${poster}",
                 fit: BoxFit.fill,
                 placeholder: (context, url) {
                   return Container(
+                    width: size.width * 0.28,
+                    height: size.height * 0.2,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
                           Colors.grey.withOpacity(0.7),
                           Colors.transparent
-                        ],
-                      ),
-                    ),
+                        ])),
                   );
                 },
               ),
@@ -71,7 +72,7 @@ class ItemMovie extends StatelessWidget {
               title,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
               maxLines: 1,
@@ -80,10 +81,10 @@ class ItemMovie extends StatelessWidget {
               height: size.height * 0.01,
             ),
             RatingBarIndicator(
-              rating: rating / 2,
+              rating: vote / 2,
               direction: Axis.horizontal,
               unratedColor: Colors.white.withOpacity(0.5),
-              itemSize: 16,
+              itemSize: 14,
               itemPadding: EdgeInsets.only(right: 4),
               itemCount: 5,
               itemBuilder: (context, index) {
