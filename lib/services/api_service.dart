@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:tmdb/models/detail.dart';
-import 'package:tmdb/models/now_playing.dart';
-import 'package:tmdb/models/popular.dart';
-import 'package:tmdb/models/recommendation.dart';
-import 'package:tmdb/models/up_coming.dart';
+import 'package:tmdb/models/detail_model.dart';
+import 'package:tmdb/models/now_playing_model.dart';
+import 'package:tmdb/models/popular_model.dart';
+import 'package:tmdb/models/recommendation_model.dart';
+import 'package:tmdb/models/up_coming_model.dart';
 
 class ApiService {
   final mainUrl = "https://api.themoviedb.org/3";
   final apiKey = "6336e4208132f6206aa0b05d04b1fda7";
 
-  Future getNowPlaying() async {
+  Future getNowPlaying(int page) async {
     try {
       final response = await http
-          .get(Uri.parse("$mainUrl/movie/now_playing?api_key=$apiKey&page=1"));
+          .get(Uri.parse("$mainUrl/movie/now_playing?api_key=$apiKey&page=$page"));
 
       print("get now playing : " + response.statusCode.toString());
       if (response.statusCode == 200) {
@@ -28,10 +28,10 @@ class ApiService {
     }
   }
 
-  Future getUpComing() async {
+  Future getUpComing(int page) async {
     try {
       final response = await http.get(Uri.parse(
-          "$mainUrl/movie/top_rated?api_key=$apiKey&language=en-US&page=1"));
+          "$mainUrl/movie/top_rated?api_key=$apiKey&language=en-US&page=$page"));
 
       print("get upcoming : " + response.statusCode.toString());
       if (response.statusCode == 200) {
@@ -46,10 +46,10 @@ class ApiService {
     }
   }
 
-  Future getPopular() async {
+  Future getPopular(int page) async {
     try {
       final response = await http.get(Uri.parse(
-          "$mainUrl/movie/popular?api_key=$apiKey&language=en-US&page=1"));
+          "$mainUrl/movie/popular?api_key=$apiKey&language=en-US&page=$page"));
 
       print("get popular : " + response.statusCode.toString());
       if (response.statusCode == 200) {

@@ -3,15 +3,18 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tmdb/main.dart';
 import 'dart:io' show Platform;
-import 'package:tmdb/models/now_playing.dart';
-import 'package:tmdb/models/popular.dart';
-import 'package:tmdb/models/up_coming.dart';
-import 'package:tmdb/pages/detail.dart';
+import 'package:tmdb/models/now_playing_model.dart';
+import 'package:tmdb/models/popular_model.dart';
+import 'package:tmdb/models/up_coming_model.dart';
+import 'package:tmdb/ui/detail/detail.dart';
+import 'package:tmdb/ui/more/more_trending.dart';
+import 'package:tmdb/ui/more/more_upcoming.dart';
 import 'package:tmdb/services/api_service.dart';
 import 'package:tmdb/widgets/item_movie.dart';
 import 'package:tmdb/widgets/theme.dart';
+
+import '../detail/detail.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -21,18 +24,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  NowPlayingModel? npModel;
-  UpComingModel? ucModel;
-  PopularModel? popularModel;
+  NowPlayingModel? _npModel;
+  UpComingModel? _ucModel;
+  PopularModel? _popularModel;
   bool _isLoaded = false;
   int _currentPage = 0;
 
   CarouselController _carouselController = CarouselController();
 
   Future<void> getNowPlaying() async {
-    ucModel = await ApiService().getUpComing();
-    npModel = await ApiService().getNowPlaying();
-    popularModel = await ApiService().getPopular();
+    _ucModel = await ApiService().getUpComing(1);
+    _npModel = await ApiService().getNowPlaying(1);
+    _popularModel = await ApiService().getPopular(1);
     setState(() {
       _isLoaded = true;
     });
@@ -125,7 +128,7 @@ class _HomeState extends State<Home> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    Detail(id: ucModel!.results![index].id!),
+                                    Detail(id: _ucModel!.results![index].id!),
                               ),
                             );
                           },
@@ -140,7 +143,7 @@ class _HomeState extends State<Home> {
                               children: [
                                 CachedNetworkImage(
                                   imageUrl:
-                                      "https://image.tmdb.org/t/p/w500${ucModel!.results![index].backdropPath}",
+                                      "https://image.tmdb.org/t/p/w500${_ucModel!.results![index].backdropPath}",
                                   fit: BoxFit.cover,
                                 ),
                                 Container(
@@ -159,7 +162,7 @@ class _HomeState extends State<Home> {
                                   left: 20,
                                   bottom: 20,
                                   child: Text(
-                                    ucModel!.results![index].title!,
+                                    _ucModel!.results![index].title!,
                                     maxLines: 1,
                                     style: TextStyle(
                                       color: Colors.white,
@@ -234,7 +237,14 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MoreTrending(),
+                                ),
+                              );
+                            },
                             child: Row(
                               children: [
                                 Text(
@@ -267,13 +277,14 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.only(left: 20),
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: npModel?.results?.length,
+                        itemCount: _npModel?.results?.length,
                         itemBuilder: (context, index) {
                           return ItemMovie(
-                              id: popularModel!.results![index].id!,
-                              image: popularModel!.results![index].posterPath!,
-                              title: popularModel!.results![index].title!,
-                              rating: popularModel!.results![index].voteAverage!);
+                              id: _popularModel!.results![index].id!,
+                              image: _popularModel!.results![index].posterPath!,
+                              title: _popularModel!.results![index].title!,
+                              rating:
+                                  _popularModel!.results![index].voteAverage!);
                         },
                       ),
                     ),
@@ -295,7 +306,14 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MoreUpComing(),
+                                ),
+                              );
+                            },
                             child: Row(
                               children: [
                                 Text(
@@ -328,13 +346,13 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.only(left: 20),
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: npModel?.results?.length,
+                        itemCount: _npModel?.results?.length,
                         itemBuilder: (context, index) {
                           return ItemMovie(
-                              id: npModel!.results![index].id!,
-                              image: npModel!.results![index].posterPath!,
-                              title: npModel!.results![index].title!,
-                              rating: npModel!.results![index].voteAverage!);
+                              id: _npModel!.results![index].id!,
+                              image: _npModel!.results![index].posterPath!,
+                              title: _npModel!.results![index].title!,
+                              rating: _npModel!.results![index].voteAverage!);
                         },
                       ),
                     ),
