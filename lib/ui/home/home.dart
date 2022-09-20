@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import 'dart:io' show Platform;
 import 'package:tmdb/models/now_playing_model.dart';
 import 'package:tmdb/models/popular_model.dart';
@@ -11,6 +12,7 @@ import 'package:tmdb/ui/detail/detail.dart';
 import 'package:tmdb/ui/more/more_trending.dart';
 import 'package:tmdb/ui/more/more_upcoming.dart';
 import 'package:tmdb/services/api_service.dart';
+import 'package:tmdb/ui/shimmer/home_shimmer.dart';
 import 'package:tmdb/widgets/item_movie.dart';
 import 'package:tmdb/widgets/theme.dart';
 
@@ -58,7 +60,7 @@ class _HomeState extends State<Home> {
           ? SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.only(
-                  top: padding.top + 5,
+                  top: padding.top + 10,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,35 +70,31 @@ class _HomeState extends State<Home> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CircleAvatar(
-                            radius: 22,
-                            backgroundImage:
-                                AssetImage("assets/images/daniel.jpg"),
-                          ),
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              FaIcon(
-                                FontAwesomeIcons.locationDot,
-                                color: Colors.white,
-                                size: 22,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
                               Text(
-                                "Semarang",
+                                "Hi, Fawwaz",
                                 style: TextStyle(
                                   color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                "Pilih film favoritmu!",
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.5),
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ],
                           ),
-                          FaIcon(
-                            FontAwesomeIcons.bell,
-                            color: Colors.white,
-                            size: 24,
+                          CircleAvatar(
+                            radius: 22,
+                            backgroundImage:
+                                AssetImage("assets/images/daniel.jpg"),
                           ),
                         ],
                       ),
@@ -226,7 +224,6 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
                             "Trending",
@@ -250,9 +247,9 @@ class _HomeState extends State<Home> {
                                 Text(
                                   "Lihat Semua",
                                   style: TextStyle(
-                                      color: secondaryColor,
-                                      fontSize: 14,
-                                      height: 1),
+                                    color: secondaryColor,
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 5,
@@ -295,7 +292,6 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
                             "Sedang Tayang",
@@ -319,9 +315,9 @@ class _HomeState extends State<Home> {
                                 Text(
                                   "Lihat Semua",
                                   style: TextStyle(
-                                      color: secondaryColor,
-                                      fontSize: 14,
-                                      height: 1),
+                                    color: secondaryColor,
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 5,
@@ -360,9 +356,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             )
-          : Center(
-              child: CircularProgressIndicator(),
-            ),
+          : HomeShimmer(),
     );
   }
 }
