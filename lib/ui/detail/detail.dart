@@ -24,6 +24,7 @@ class _DetailState extends State<Detail> {
   DetailMovieModel? _detailModel;
   RecommendationModel? _recomModel;
   bool _isLoaded = false;
+  bool _showFab = false;
 
   Future<void> _getDetail() async {
     _detailModel = await ApiService().getDetail(widget.id);
@@ -74,6 +75,7 @@ class _DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    const duration = Duration(milliseconds: 300);
 
     return Scaffold(
       body: _isLoaded
@@ -307,11 +309,11 @@ class _DetailState extends State<Detail> {
                             padding: EdgeInsets.only(left: 20, right: 5),
                             itemCount: _detailModel?.videos?.results?.length,
                             itemBuilder: (context, index) {
-                              final model = _detailModel!.videos!.results![index];
+                              final model =
+                                  _detailModel!.videos!.results![index];
 
                               return ItemVideo(
-                                ytKey:
-                                    model.key!,
+                                ytKey: model.key!,
                               );
                             },
                           ),
@@ -345,7 +347,7 @@ class _DetailState extends State<Detail> {
                               return ItemRecommendation(
                                 id: model.id!,
                                 title: model.title!,
-                                poster: model.posterPath!,
+                                poster: model.posterPath ?? "a",
                                 vote: model.voteAverage!,
                               );
                             },
@@ -360,6 +362,14 @@ class _DetailState extends State<Detail> {
           : Center(
               child: CircularProgressIndicator(),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.pink,
+        child: Icon(
+          Icons.favorite,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 

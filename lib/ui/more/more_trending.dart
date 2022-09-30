@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tmdb/models/movie_model.dart';
 import 'package:tmdb/widgets/item_more.dart';
-import '../../models/popular_model.dart';
 import '../../services/api_service.dart';
 
 class MoreTrending extends StatefulWidget {
@@ -11,7 +11,7 @@ class MoreTrending extends StatefulWidget {
 }
 
 class _MoreTrendingState extends State<MoreTrending> {
-  PopularModel? _model;
+  MovieModel? _model;
   bool _isLoaded = false;
   bool _hasMore = true;
   int _currentPage = 1;

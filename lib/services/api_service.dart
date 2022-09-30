@@ -1,24 +1,24 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tmdb/models/detail_model.dart';
-import 'package:tmdb/models/now_playing_model.dart';
-import 'package:tmdb/models/popular_model.dart';
+import 'package:tmdb/models/movie_model.dart';
 import 'package:tmdb/models/recommendation_model.dart';
-import 'package:tmdb/models/up_coming_model.dart';
 
 class ApiService {
-  final mainUrl = "https://api.themoviedb.org/3";
-  final apiKey = "6336e4208132f6206aa0b05d04b1fda7";
+  final baseUrl = "https://api.themoviedb.org/3/";
+  final apiKey = "?api_key=6336e4208132f6206aa0b05d04b1fda7";
 
   Future getNowPlaying(int page) async {
+    final endPoint = "movie/now_playing";
+    String query = "&page=$page";
+    String url = "$baseUrl$endPoint$apiKey$query";
+
     try {
-      final response = await http
-          .get(Uri.parse("$mainUrl/movie/now_playing?api_key=$apiKey&page=$page"));
+      final response = await http.get(Uri.parse(url));
 
       print("get now playing : " + response.statusCode.toString());
       if (response.statusCode == 200) {
-        NowPlayingModel? model =
-            NowPlayingModel.fromJson(jsonDecode(response.body));
+        MovieModel? model = MovieModel.fromJson(jsonDecode(response.body));
         return model;
       } else {
         throw "Failed to fetch API";
@@ -28,15 +28,17 @@ class ApiService {
     }
   }
 
-  Future getUpComing(int page) async {
+  Future getTopRated(int page) async {
+    final endPoint = "movie/top_rated";
+    String query = "&page=$page";
+    String url = "$baseUrl$endPoint$apiKey$query";
+
     try {
-      final response = await http.get(Uri.parse(
-          "$mainUrl/movie/top_rated?api_key=$apiKey&language=en-US&page=$page"));
+      final response = await http.get(Uri.parse(url));
 
       print("get upcoming : " + response.statusCode.toString());
       if (response.statusCode == 200) {
-        UpComingModel? model =
-            UpComingModel.fromJson(jsonDecode(response.body));
+        MovieModel? model = MovieModel.fromJson(jsonDecode(response.body));
         return model;
       } else {
         throw "Failed to fetch API";
@@ -47,13 +49,16 @@ class ApiService {
   }
 
   Future getPopular(int page) async {
+    final endPoint = "movie/popular";
+    String query = "&page=$page";
+    String url = "$baseUrl$endPoint$apiKey$query";
+
     try {
-      final response = await http.get(Uri.parse(
-          "$mainUrl/movie/popular?api_key=$apiKey&language=en-US&page=$page"));
+      final response = await http.get(Uri.parse(url));
 
       print("get popular : " + response.statusCode.toString());
       if (response.statusCode == 200) {
-        PopularModel? model = PopularModel.fromJson(jsonDecode(response.body));
+        MovieModel? model = MovieModel.fromJson(jsonDecode(response.body));
         return model;
       } else {
         throw "Failed to fetch API";
@@ -64,9 +69,12 @@ class ApiService {
   }
 
   Future getDetail(int id) async {
+    final endPoint = "movie/$id";
+    final query = "&language=en-US&append_to_response=videos,credits";
+    String url = "$baseUrl$endPoint$apiKey$query";
+
     try {
-      final response = await http.get(Uri.parse(
-          "$mainUrl/movie/$id?api_key=$apiKey&language=en-US&append_to_response=videos,credits"));
+      final response = await http.get(Uri.parse(url));
 
       print("get detail : " + response.statusCode.toString());
       if (response.statusCode == 200) {
@@ -82,9 +90,11 @@ class ApiService {
   }
 
   Future getRecommendation(int id) async {
+    final endPoint = "movie/$id/recommendations";
+    String url = "$baseUrl$endPoint$apiKey";
+
     try {
-      final response = await http.get(Uri.parse(
-          "$mainUrl/movie/$id/recommendations?api_key=$apiKey&language=en-US&page=1"));
+      final response = await http.get(Uri.parse(url));
 
       print("get recommendation : " + response.statusCode.toString());
       if (response.statusCode == 200) {

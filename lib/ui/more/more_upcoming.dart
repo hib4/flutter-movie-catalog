@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tmdb/models/now_playing_model.dart';
+import 'package:tmdb/models/movie_model.dart';
 import '../../services/api_service.dart';
 import '../../widgets/item_more.dart';
 
@@ -11,7 +11,7 @@ class MoreUpComing extends StatefulWidget {
 }
 
 class _MoreUpComingState extends State<MoreUpComing> {
-  NowPlayingModel? _model;
+  MovieModel? _model;
   bool _isLoaded = false;
   bool _hasMore = true;
   int _currentPage = 1;
