@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:tmdb/database/init/database.dart';
+import 'package:tmdb/database/model/database_model.dart';
+import 'package:tmdb/models/movie_model.dart';
 import 'dart:io' show Platform;
-import 'package:tmdb/models/now_playing_model.dart';
-import 'package:tmdb/models/popular_model.dart';
-import 'package:tmdb/models/up_coming_model.dart';
 import 'package:tmdb/ui/detail/detail.dart';
 import 'package:tmdb/ui/more/more_trending.dart';
 import 'package:tmdb/ui/more/more_upcoming.dart';
@@ -26,18 +26,96 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  NowPlayingModel? _npModel;
-  UpComingModel? _ucModel;
-  PopularModel? _popularModel;
+  MovieModel? _npModel;
+  MovieModel? _tpModel;
+  MovieModel? _popularModel;
+
+  List _npResult = [];
+  List _tpResult = [];
+  List _popularResult = [];
+
+  DatabaseHelper _db = DatabaseHelper.instance;
   bool _isLoaded = false;
   int _currentPage = 0;
 
   CarouselController _carouselController = CarouselController();
 
-  Future<void> getNowPlaying() async {
-    _ucModel = await ApiService().getUpComing(1);
-    _npModel = await ApiService().getNowPlaying(1);
+  Future getPopular() async {
     _popularModel = await ApiService().getPopular(1);
+    _popularResult = _popularModel!.results!;
+
+    await _db.deleteTable(MovieFields.popular);
+
+    for (int i = 0; i < _popularResult.length; i++) {
+      final data = _popularResult[i];
+      var result = MovieDatabaseModel(
+        id: data.id,
+        posterPath: data.posterPath,
+        backdropPath: data.backdropPath,
+        title: data.title,
+        voteAverage: data.voteAverage,
+      );
+      await _db.create(MovieFields.popular, result);
+    }
+  }
+
+  Future getNowPlaying() async {
+    _npModel = await ApiService().getNowPlaying(1);
+    _npResult = _npModel!.results!;
+
+    await _db.deleteTable(MovieFields.nowPlaying);
+
+    for (int i = 0; i < _npResult.length; i++) {
+      final data = _npResult[i];
+      var result = MovieDatabaseModel(
+        id: data.id,
+        posterPath: data.posterPath,
+        backdropPath: data.backdropPath,
+        title: data.title,
+        voteAverage: data.voteAverage,
+      );
+      await _db.create(MovieFields.nowPlaying, result);
+    }
+  }
+
+  Future getTopRated() async {
+    _tpModel = await ApiService().getTopRated(1);
+    _tpResult = _tpModel!.results!;
+
+    await _db.deleteTable(MovieFields.topRated);
+
+    for (int i = 0; i < 5; i++) {
+      final data = _tpResult[i];
+      var result = MovieDatabaseModel(
+        id: data.id,
+        posterPath: data.posterPath,
+        backdropPath: data.backdropPath,
+        title: data.title,
+        voteAverage: data.voteAverage,
+      );
+      await _db.create(MovieFields.topRated, result);
+    }
+  }
+
+  Future<void> getApi() async {
+    var connectivity = await (Connectivity().checkConnectivity());
+
+    if (connectivity == ConnectivityResult.none) {
+      print("connectivity none");
+
+      _npResult = await _db.read(MovieFields.nowPlaying);
+      _tpResult = await _db.read(MovieFields.topRated);
+      _popularResult = await _db.read(MovieFields.popular);
+
+      print(_popularResult.length);
+    } else {
+      print("connectivity ready");
+
+      await getPopular();
+      await getNowPlaying();
+      await getTopRated();
+    }
+
     setState(() {
       _isLoaded = true;
     });
@@ -47,7 +125,7 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getNowPlaying();
+    getApi();
   }
 
   @override
@@ -120,13 +198,13 @@ class _HomeState extends State<Home> {
                       itemCount: 5,
                       carouselController: _carouselController,
                       itemBuilder: (context, index, pageViewIndex) {
+                        var result = _tpResult[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    Detail(id: _ucModel!.results![index].id!),
+                                builder: (context) => Detail(id: result.id!),
                               ),
                             );
                           },
@@ -141,7 +219,7 @@ class _HomeState extends State<Home> {
                               children: [
                                 CachedNetworkImage(
                                   imageUrl:
-                                      "https://image.tmdb.org/t/p/w500${_ucModel!.results![index].backdropPath}",
+                                      "https://image.tmdb.org/t/p/w500${result.backdropPath}",
                                   fit: BoxFit.cover,
                                 ),
                                 Container(
@@ -160,7 +238,7 @@ class _HomeState extends State<Home> {
                                   left: 20,
                                   bottom: 20,
                                   child: Text(
-                                    _ucModel!.results![index].title!,
+                                    result.title!,
                                     maxLines: 1,
                                     style: TextStyle(
                                       color: Colors.white,
@@ -274,14 +352,14 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.only(left: 20),
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: _npModel?.results?.length,
+                        itemCount: _popularResult.length,
                         itemBuilder: (context, index) {
+                          var result = _popularResult[index];
                           return ItemMovie(
-                              id: _popularModel!.results![index].id!,
-                              image: _popularModel!.results![index].posterPath!,
-                              title: _popularModel!.results![index].title!,
-                              rating:
-                                  _popularModel!.results![index].voteAverage!);
+                              id: result.id!,
+                              image: result.posterPath!,
+                              title: result.title!,
+                              rating: result.voteAverage!);
                         },
                       ),
                     ),
@@ -342,13 +420,14 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.only(left: 20),
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: _npModel?.results?.length,
+                        itemCount: _npResult.length,
                         itemBuilder: (context, index) {
+                          var result = _npResult[index];
                           return ItemMovie(
-                              id: _npModel!.results![index].id!,
-                              image: _npModel!.results![index].posterPath!,
-                              title: _npModel!.results![index].title!,
-                              rating: _npModel!.results![index].voteAverage!);
+                              id: result.id!,
+                              image: result.posterPath!,
+                              title: result.title!,
+                              rating: result.voteAverage!);
                         },
                       ),
                     ),
