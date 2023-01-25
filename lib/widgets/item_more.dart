@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tmdb/config/responsive_config.dart';
 import '../ui/detail/detail.dart';
 
 class ItemMore extends StatelessWidget {
@@ -42,7 +43,7 @@ class ItemMore extends StatelessWidget {
           children: [
             Container(
               width: size.width,
-              height: size.height * 0.145,
+              height: isLandscape(context) ? size.height * 0.33 : size.height * 0.145,
               margin: EdgeInsets.only(top: size.height * 0.05),
               decoration: BoxDecoration(
                 color: Color(0XFF434051),
@@ -50,14 +51,14 @@ class ItemMore extends StatelessWidget {
               ),
             ),
             Container(
-              height: size.height * 0.175,
+              height: isLandscape(context) ? size.height * 0.33 : size.height * 0.175,
               margin: EdgeInsets.only(left: 10, top: 8),
               child: Row(
                 children: [
                   Container(
-                    width: size.width * 0.25,
-                    height: size.height * 0.175,
-                    margin: EdgeInsets.only(right: 10),
+                    width: isLandscape(context) ? size.width * 0.12 : size.width * 0.25,
+                    height: isLandscape(context) ? size.height * 0.33 : size.height * 0.175,
+                    margin: EdgeInsets.only(right: 15),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(7),
