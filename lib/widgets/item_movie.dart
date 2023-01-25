@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tmdb/config/responsive_config.dart';
 import '../ui/detail/detail.dart';
 
 class ItemMovie extends StatelessWidget {
@@ -32,7 +33,7 @@ class ItemMovie extends StatelessWidget {
         );
       },
       child: Container(
-        width: size.width * 0.34,
+        width: isLandscape(context) ? size.width * 0.18 : size.width * 0.34,
         margin: EdgeInsets.only(right: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -40,7 +41,7 @@ class ItemMovie extends StatelessWidget {
           children: [
             Container(
               width: size.width * 0.34,
-              height: size.height * 0.25,
+              height: isLandscape(context) ? size.height * 0.52 : size.height * 0.25,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
