@@ -41,7 +41,7 @@ class ItemMovie extends StatelessWidget {
           children: [
             Container(
               width: size.width * 0.34,
-              height: isLandscape(context) ? size.height * 0.52 : size.height * 0.25,
+              height: isLandscape(context) ? size.height * 0.54 : size.height * 0.25,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),

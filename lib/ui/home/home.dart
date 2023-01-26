@@ -153,7 +153,7 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Hi, Fawwaz ${size.height}",
+                                "Hi, Fawwaz",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
