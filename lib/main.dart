@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:tmdb/services/data.dart';
 import 'package:tmdb/ui/home/home.dart';
 import 'package:tmdb/widgets/theme.dart';
 
@@ -20,19 +22,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-          appBarTheme: AppBarTheme(backgroundColor: appBarColor),
-          scaffoldBackgroundColor: backgroundColor,
-          textTheme: GoogleFonts.openSansTextTheme()),
-      builder: (context, child) {
-        return ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: child!,
-        );
-      },
-      debugShowCheckedModeBanner: false,
-      home: Home(),
+    return ChangeNotifierProvider(
+      create: (context) => Data(),
+      child: MaterialApp(
+        theme: ThemeData(
+            appBarTheme: AppBarTheme(backgroundColor: appBarColor),
+            scaffoldBackgroundColor: backgroundColor,
+            textTheme: GoogleFonts.openSansTextTheme()),
+        builder: (context, child) {
+          return ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: child!,
+          );
+        },
+        debugShowCheckedModeBanner: false,
+        home: Home(),
+      ),
     );
   }
 }

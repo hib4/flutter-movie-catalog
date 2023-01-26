@@ -4,9 +4,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tmdb/database/init/database.dart';
 import 'package:tmdb/database/model/database_model.dart';
 import 'package:tmdb/models/movie_model.dart';
+import 'package:tmdb/services/data.dart';
 import 'dart:io' show Platform;
 import 'package:tmdb/ui/detail/detail.dart';
 import 'package:tmdb/ui/more/more_trending.dart';
@@ -110,10 +112,7 @@ class _HomeState extends State<Home> {
       print(_popularResult.length);
     } else {
       print("connectivity ready");
-
-      await getPopular();
-      await getNowPlaying();
-      await getTopRated();
+      Provider.of<Data>(context, listen: false).fetchdata(context);
     }
 
     setState(() {
@@ -130,6 +129,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Data>(context);
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
 
@@ -198,7 +198,7 @@ class _HomeState extends State<Home> {
                       itemCount: 5,
                       carouselController: _carouselController,
                       itemBuilder: (context, index, pageViewIndex) {
-                        var result = _tpResult[index];
+                        var result = provider.tpResult[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -356,10 +356,10 @@ class _HomeState extends State<Home> {
                         itemBuilder: (context, index) {
                           var result = _popularResult[index];
                           return ItemMovie(
-                              id: result.id!,
-                              image: result.posterPath!,
-                              title: result.title!,
-                              rating: result.voteAverage!);
+                              id: provider.popularResult[index],
+                              image: result.posterPath,
+                              title: result.title,
+                              rating: result.voteAverage);
                         },
                       ),
                     ),
@@ -422,12 +422,12 @@ class _HomeState extends State<Home> {
                         scrollDirection: Axis.horizontal,
                         itemCount: _npResult.length,
                         itemBuilder: (context, index) {
-                          var result = _npResult[index];
+                          var result = provider.npResult[index];
                           return ItemMovie(
-                              id: result.id!,
-                              image: result.posterPath!,
-                              title: result.title!,
-                              rating: result.voteAverage!);
+                              id: result.id,
+                              image: result.posterPath,
+                              title: result.title,
+                              rating: result.voteAverage);
                         },
                       ),
                     ),
