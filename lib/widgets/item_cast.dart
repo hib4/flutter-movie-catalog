@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:tmdb/config/responsive_config.dart';
 
 class ItemCast extends StatelessWidget {
   final String imageUrl;
@@ -18,15 +19,14 @@ class ItemCast extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Container(
-      width: size.width * 0.18,
       margin: EdgeInsets.only(right: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: size.width * 0.18,
-            height: size.height * 0.13,
+            width: isLandscape(context) ? size.width * 0.11 : size.width * 0.22,
+            height: isLandscape(context) ? size.height * 0.33 :size.height * 0.15,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -37,8 +37,6 @@ class ItemCast extends StatelessWidget {
               fit: BoxFit.cover,
               placeholder: (context, url) {
                 return Container(
-                  width: size.width * 0.18,
-                  height: size.height * 0.13,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
@@ -50,6 +48,9 @@ class ItemCast extends StatelessWidget {
                 );
               },
             ),
+          ),
+          SizedBox(
+            height: isLandscape(context) ? 5 : 0,
           ),
           Text(
             name,

@@ -18,6 +18,7 @@ import 'package:tmdb/ui/shimmer/home_shimmer.dart';
 import 'package:tmdb/widgets/item_movie.dart';
 import 'package:tmdb/widgets/theme.dart';
 
+import '../../config/responsive_config.dart';
 import '../detail/detail.dart';
 
 class Home extends StatefulWidget {
@@ -260,10 +261,10 @@ class _HomeState extends State<Home> {
                               Duration(milliseconds: 800),
                           pauseAutoPlayOnTouch: true,
                           initialPage: 0,
-                          viewportFraction: 0.85,
+                          viewportFraction: isLandscape(context) ? 0.75 : 0.85,
                           enlargeCenterPage: true,
                           disableCenter: true,
-                          height: size.height * 0.25,
+                          height: isLandscape(context) ? size.height * 0.7 : size.height * 0.25,
                           onPageChanged: (index, reason) {
                             setState(() {
                               _currentPage = index;

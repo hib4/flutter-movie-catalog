@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../config/responsive_config.dart';
 import '../ui/detail/detail.dart';
 
 class ItemRecommendation extends StatelessWidget {
@@ -32,7 +33,7 @@ class ItemRecommendation extends StatelessWidget {
         );
       },
       child: Container(
-        width: size.width * 0.3,
+        width: isLandscape(context) ? size.width * 0.155 : size.width * 0.3,
         margin: EdgeInsets.only(right: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -40,7 +41,7 @@ class ItemRecommendation extends StatelessWidget {
           children: [
             Container(
               width: size.width * 0.3,
-              height: size.height * 0.22,
+              height: isLandscape(context) ? size.height * 0.45 : size.height * 0.22,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tmdb/config/responsive_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ItemVideo extends StatelessWidget {
@@ -25,7 +26,7 @@ class ItemVideo extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Container(
-            width: size.width * 0.45,
+            width: isLandscape(context) ? size.width * 0.25 : size.width * 0.45,
             margin: EdgeInsets.only(right: 15),
             clipBehavior: Clip.antiAliasWithSaveLayer,
             decoration: BoxDecoration(

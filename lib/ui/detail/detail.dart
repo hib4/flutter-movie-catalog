@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tmdb/config/responsive_config.dart';
 import 'package:tmdb/models/detail_model.dart';
 import 'package:tmdb/models/recommendation_model.dart';
 import 'package:tmdb/services/api_service.dart';
@@ -75,13 +76,11 @@ class _DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    const duration = Duration(milliseconds: 300);
 
     return Scaffold(
       body: _isLoaded
           ? SingleChildScrollView(
               child: Stack(
-                clipBehavior: Clip.none,
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -91,12 +90,15 @@ class _DetailState extends State<Detail> {
                       _openUrl(url);
                     },
                     child: Container(
-                      height: size.height * 0.3,
+                      width: double.infinity,
+                      height: isLandscape(context)
+                          ? size.height * 0.55
+                          : size.height * 0.3,
                       child: Stack(
-                        fit: StackFit.passthrough,
                         alignment: Alignment.center,
                         children: [
                           CachedNetworkImage(
+                            width: double.infinity,
                             imageUrl:
                                 "https://image.tmdb.org/t/p/w500${_detailModel!.backdropPath}",
                             fit: BoxFit.cover,
@@ -115,6 +117,7 @@ class _DetailState extends State<Detail> {
                           Image.asset(
                             "assets/images/play.png",
                             width: 50,
+                            height: 50,
                           ),
                         ],
                       ),
@@ -122,7 +125,10 @@ class _DetailState extends State<Detail> {
                   ),
                   Container(
                     width: size.width,
-                    margin: EdgeInsets.only(top: size.width * 0.5),
+                    margin: EdgeInsets.only(
+                        top: isLandscape(context)
+                            ? size.width * 0.18
+                            : size.width * 0.5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -132,8 +138,12 @@ class _DetailState extends State<Detail> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Container(
-                                width: size.width * 0.35,
-                                height: size.height * 0.25,
+                                width: isLandscape(context)
+                                    ? size.width * 0.18
+                                    : size.width * 0.35,
+                                height: isLandscape(context)
+                                    ? size.height * 0.5
+                                    : size.height * 0.25,
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -209,7 +219,9 @@ class _DetailState extends State<Detail> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.04,
+                          height: isLandscape(context)
+                              ? size.height * 0.08
+                              : size.height * 0.04,
                         ),
                         Container(
                           width: size.width,
@@ -224,7 +236,9 @@ class _DetailState extends State<Detail> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.03,
+                          height: isLandscape(context)
+                              ? size.height * 0.08
+                              : size.height * 0.04,
                         ),
                         Container(
                           width: size.width,
@@ -252,7 +266,9 @@ class _DetailState extends State<Detail> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.04,
+                          height: isLandscape(context)
+                              ? size.height * 0.08
+                              : size.height * 0.04,
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 20),
@@ -269,7 +285,9 @@ class _DetailState extends State<Detail> {
                           height: size.height * 0.02,
                         ),
                         Container(
-                          height: size.height * 0.21,
+                          height: isLandscape(context)
+                              ? size.height * 0.44
+                              : size.height * 0.21,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             padding: EdgeInsets.only(left: 20, right: 5),
@@ -286,7 +304,9 @@ class _DetailState extends State<Detail> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.05,
+                          height: isLandscape(context)
+                              ? size.height * 0.08
+                              : size.height * 0.04,
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 20),
@@ -303,7 +323,9 @@ class _DetailState extends State<Detail> {
                           height: size.height * 0.03,
                         ),
                         Container(
-                          height: size.height * 0.14,
+                          height: isLandscape(context)
+                              ? size.height * 0.3
+                              : size.height * 0.14,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             padding: EdgeInsets.only(left: 20, right: 5),
@@ -319,7 +341,9 @@ class _DetailState extends State<Detail> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.04,
+                          height: isLandscape(context)
+                              ? size.height * 0.08
+                              : size.height * 0.04,
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 20),
@@ -336,7 +360,9 @@ class _DetailState extends State<Detail> {
                           height: size.height * 0.03,
                         ),
                         Container(
-                          height: size.height * 0.3,
+                          height: isLandscape(context)
+                              ? size.height * 0.65
+                              : size.height * 0.3,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             padding: EdgeInsets.only(left: 20, right: 5),
@@ -397,7 +423,7 @@ class _DetailState extends State<Detail> {
   Widget _infoText(Size size, String title, String desc) {
     return Container(
       width: size.width * 0.25,
-      height: size.height * 0.07,
+      height: isLandscape(context) ? size.height * 0.17 : size.height * 0.07,
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         border: Border.all(
@@ -431,7 +457,7 @@ class _DetailState extends State<Detail> {
   Widget _infoRating(Size size, double rating) {
     return Container(
       width: size.width * 0.25,
-      height: size.height * 0.07,
+      height: isLandscape(context) ? size.height * 0.17 : size.height * 0.07,
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         border: Border.all(

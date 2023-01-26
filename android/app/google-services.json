@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "797146328086",
+    "project_id": "movie-catalog-ec0c1",
+    "storage_bucket": "movie-catalog-ec0c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797146328086:android:282c57e2d351ec7f24d937",
+        "android_client_info": {
+          "package_name": "com.hiba.tmdb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "797146328086-ikudu9ghuj4porpgmttkrlhsvalg8g0p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCquZvqsZJ7xDuNyAu4Ar6mlidWsPoDYxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "797146328086-ikudu9ghuj4porpgmttkrlhsvalg8g0p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
