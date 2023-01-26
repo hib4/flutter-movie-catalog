@@ -26,7 +26,7 @@ class ItemVideo extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Container(
-            width: isLandscape(context) ? size.width * 0.3 : size.width * 0.45,
+            width: isLandscape(context) ? size.width * 0.25 : size.width * 0.45,
             margin: EdgeInsets.only(right: 15),
             clipBehavior: Clip.antiAliasWithSaveLayer,
             decoration: BoxDecoration(
